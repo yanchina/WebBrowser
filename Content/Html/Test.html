@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+            background: linear-gradient(
+                rgba(240, 240, 240, 0.5),
+                rgba(240, 240, 240, 0.5)
+            ), radial-gradient(
+                circle at center,
+                transparent 30%,
+                rgba(200, 200, 200, 0.7) 100%
+            );
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .content {
+            flex: 1;
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .bottom-text {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <button onclick="CallUE()">ExecuteUeFunction</button>
+        </div>
+
+    </div>
+
+    <script>
+  
+
+        function CallUE() {
+			var vec = {};
+			vec.X = 2.365;
+			vec.Y = 3.569;
+			vec.Z = 4.13;
+			
+			var arr = [7.456,8.889,9.963];
+			
+           ue.Interface.UEFunctionTest(true,"js String",5.5689,vec, arr, function(r0,r1,r2,r3,r4,r5) {
+				console.log("UE return call back");
+				
+				console.log("UE return Param0 " + r0);
+				console.log("UE return Param1 " + r1);
+				console.log("UE return Param2 " + r2);
+				console.log("UE return Param3 " + r3);
+				console.log("UE return Param4 " + r4);
+				console.log("UE return Param4 " + r4.key1 + " " + r4.key2);
+				console.log("UE return Param5 " + r5 +" " + r5.Translation.X + " " +r5.Translation.Y + " "  + " " + r5.Rotation.Y+ " " + r5.Scale3D.Z);
+			
+		   });
+        }
+
+		function JSTest()
+		{
+			console.log("Call JSTest, no return");
+		}
+		
+		function JSTest1(param)
+		{
+			console.log("call JSTest1, return string == " + " Param String " + param);
+			return "Call JS return string";
+		}
+		
+		function JSTest2(param)
+		{
+			console.log("Call JSTest2 return Array == " + " Param Array " + param);
+			var Data = ["JSArray0","JSArray1","JSArray2","JSArray3","JSArray4"];
+			return Data;
+		}
+		
+		function JSTest3(param)
+		{
+			console.log("call JSTest3 return obj == " + " Param Obj(Struct) " + param.X +" "+ param.Y +" "+ param.Z);
+			var obj = {};
+			obj.X = 1;
+			obj.Y = 2;
+			obj.Z = 3;
+			return obj;
+		}
+		
+		function JSTest4(param)
+		{
+			// JSON In UE convert To Struct 
+			console.log("call JSTest4 return Json == " + " Param Obj(Struct) " + param.X +" "+ param.Y +" "+ param.Z);
+			var Json = {
+				"X": 1,
+				"Y": 2,
+				"Z": 3
+			};
+			
+			return Json;
+		}
+		
+		function JSTest5(param)
+		{
+			console.log("call JSTest5 return Json == " + " Param number " + param);
+			var val = 1.2356;
+			return val;
+		}
+		
+		function JSTest6(param)
+		{
+			// UE Transfoirm Serialize Is Translation  Rotation And Scale3D, Rotation Save As Quaternion
+		console.log("============================== JSTest6 ==========================" + param);
+		
+			console.log("call JSTest6 blueprint Struct  " 
+				+ "\nParam=\n Str=" 
+				+ param.Str + "\n Float="
+				+ param.Float + "\n Name="
+				+ param.Name + "\n Text="
+				+ param.Text + "\n Integer="
+				+ param.Integer + "\n ArrayStr="
+				+ param.ArrayStr[0] + " " + param.ArrayStr[1] + " " + param.ArrayStr[2] + " " + param.ArrayStr[3] + "\n Child=\n   "
+				+ param.Child.Str + " " + param.Child.Float + " " + param.Child.Array[0] + " " + param.Child.Array[1] + "\n Childs=   "
+				+ param.Childs[0].Str + " " + param.Childs[0].Float + " " + param.Childs[0].Array[0] + " " + param.Childs[0].Array[1] + " " + param.Childs[0].Array[2] + "\n   "
+				+ param.Childs[1].Str + " " + param.Childs[1].Float + " " + param.Childs[1].Array[0] + " " + param.Childs[1].Array[1] + " " + param.Childs[1].Array[2] + " " + param.Childs[1].Array[3] + "\n MapTest=\n   Key=ujuju"
+				+ param.MapTest["ujuju"].Str + " " + param.MapTest["ujuju"].Float + " " + param.MapTest["ujuju"].Array[0] + " " + param.MapTest["ujuju"].Array[1] + "\n   Key=kkiki"
+				+ param.MapTest["kkiki"].Str + " " + param.MapTest["kkiki"].Float + " " + param.MapTest["kkiki"].Array[0] + " " + param.MapTest["kkiki"].Array[1] + " " + param.MapTest["kkiki"].Array[2] + "\n MapStr="
+				+ param.MapStr["454545"] + " " + param.MapStr["dsfsdf"] + "\n SetTest=\n   "
+				+ param.SetTest[0].Translation.X + " " + param.SetTest[0].Translation.Y + " " + param.SetTest[0].Translation.Z + "\n   "
+				+ param.SetTest[0].Rotation.X + " " + param.SetTest[0].Rotation.Y + " " + param.SetTest[0].Rotation.Z + "\n   "
+				+ param.SetTest[0].Scale3D.X + " " + param.SetTest[0].Scale3D.Y + " " + param.SetTest[0].Scale3D.Z + "\n   "
+				+ param.SetTest[1].Translation.X + " " + param.SetTest[1].Translation.Y + " " + param.SetTest[1].Translation.Z + "\n   "
+				+ param.SetTest[1].Rotation.X + " " + param.SetTest[1].Rotation.Y + " " + param.SetTest[1].Rotation.Z + "\n   "
+				+ param.SetTest[1].Scale3D.X + " " + param.SetTest[1].Scale3D.Y + " " + param.SetTest[1].Scale3D.Z + "\n SetStr="
+				+ param.SetStr[0] + " " + param.SetStr[1]
+				);
+			
+			var val = {};
+			val.Str = "jsstr";
+			val.Float = 1.256;
+			val.Name = "jsName";
+			val.Text = "jsText";
+			val.Integer = 2548;
+			val.ArrayStr = ["js1", "js2","js3","js4","js5"];
+			val.Child = {};
+			val.Child.Str = "Child.Str";
+			val.Child.Float = 3.568;
+			val.Child.Array = ["Childjs1", "Childjs2","Childjs3","Childjs4","Childjs5"];
+			val.Childs = [val.Child,val.Child,val.Child];
+			
+			val.MapTest = {};
+			val.MapTest["eee"] = val.Child;
+			val.MapTest["yyy"] = val.Child;
+			val.MapTest["iii"] = val.Child;
+			
+			val.MapStr = {};
+			val.MapStr["xxx"] = "yyy";
+			val.MapStr["aaa"] = "bbb";
+			val.MapStr["ccc"] = "ddd";
+			
+			// UE Transform
+			var element = {};
+			element.Translation = {};
+			element.Translation.X = 1,
+			element.Translation.Y = 2;
+			element.Translation.Z = 3;
+			
+			element.Rotation = {};
+			element.Rotation.X = 4,
+			element.Rotation.Y = 5;
+			element.Rotation.Z = 6;
+			
+			element.Scale3D = {};
+			element.Scale3D.X = 7,
+			element.Scale3D.Y = 8;
+			element.Scale3D.Z = 9;
+			
+			
+			val.SetTest = [element,element,element];
+			
+			val.SetStr = ["xxx","ffff","kkkk"];
+			
+			return val;
+		}
+		
+		var JSObj = {}
+		
+		JSObj.JSTest = JSTest;
+		JSObj.JSTest1 = JSTest1;
+		JSObj.JSTest2 = JSTest2;
+		JSObj.JSTest3 = JSTest3;
+		JSObj.JSTest4 = JSTest4;
+		JSObj.JSTest5 = JSTest5;
+		JSObj.JSTest6 = JSTest6;
+		
+        window.onload = function() {
+            console.log("Load Complete!");
+        }
+    </script>
+</body>
+</html>
