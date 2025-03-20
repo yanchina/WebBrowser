@@ -75,6 +75,11 @@ public class YzgWebBrowser : ModuleRules
 
         AddEngineThirdPartyPrivateStaticDependencies(Target, "DX12");
 
+        foreach (string FileName in Directory.EnumerateFiles(Path.Combine(PluginDirectory, "Content", "Html"), "*.*", SearchOption.TopDirectoryOnly))
+        {
+            RuntimeDependencies.Add(FileName.Replace('\\', '/'));
+        }
+
         if (Target.Platform == UnrealTargetPlatform.Android)
 		{
 			PublicSystemLibraries.Add("libjnigraphics");

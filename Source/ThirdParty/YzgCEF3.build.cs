@@ -19,8 +19,6 @@ public class YzgCEF3 : ModuleRules
 
 		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{
-            //CEFVersion = "130.1.16+g5a7e5ed+chromium-130.0.6723.117";
-            //CEFVersion = "131.3.5+g573cec5+chromium-131.0.6778.205";
             CEFVersion = "131.4.1+g437feba+chromium-131.0.6778.265";
             CEFPlatform = "windows64";
 		}
@@ -42,25 +40,21 @@ public class YzgCEF3 : ModuleRules
                 RuntimeDependencies.Add(LibraryPath + "/v8_context_snapshot.bin");
                 RuntimeDependencies.Add(LibraryPath + "/vk_swiftshader_icd.json");
                 RuntimeDependencies.Add(LibraryPath + "/icudtl.dat");
-                //Console.WriteLine("Add dat =" + (LibraryPath + "/icudtl.dat").Replace('\\', '/'));
 
                 foreach (string FileName in Directory.EnumerateFiles(LibraryPath, "*.pak", SearchOption.AllDirectories))
                 {
                     RuntimeDependencies.Add(FileName.Replace('\\', '/'));
-                    //Console.WriteLine("Add Pak =" + FileName.Replace('\\', '/'));
                 }
 
                 foreach (string FileName in Directory.EnumerateFiles(LibraryPath, "*.lib", SearchOption.TopDirectoryOnly))
                 {
                     PublicAdditionalLibraries.Add(FileName.Replace('\\', '/'));
-                    //Console.WriteLine("Add Lib =" + FileName.Replace('\\', '/'));
                 }
 
                 foreach (string FileName in Directory.EnumerateFiles(LibraryPath, "*.dll", SearchOption.TopDirectoryOnly))
                 {
                     PublicDelayLoadDLLs.Add(System.IO.Path.GetFileName(FileName.Replace('\\', '/')));
                     RuntimeDependencies.Add(FileName);
-                    //Console.WriteLine("Add Dll =" + FileName.Replace('\\', '/'));
                 }
             }
 
