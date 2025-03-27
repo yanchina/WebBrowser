@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 #include "YzgWebBrowserTexture.h"
 
@@ -8,9 +8,6 @@
 #include "RenderingThread.h"
 #include "UObject/WeakObjectPtrTemplates.h"
 #include "WebBrowserTextureResource.h"
-
-/* UYzgWebBrowserTexture structors
-*****************************************************************************/
 
 UYzgWebBrowserTexture::UYzgWebBrowserTexture(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -23,9 +20,6 @@ UYzgWebBrowserTexture::UYzgWebBrowserTexture(const FObjectInitializer& ObjectIni
 	WebPlayerGuid = FGuid::NewGuid();
 	NeverStream = true;
 }
-
-/* UYzgWebBrowserTexture interface
-*****************************************************************************/
 
 float UYzgWebBrowserTexture::GetAspectRatio() const
 {
@@ -46,9 +40,6 @@ int32 UYzgWebBrowserTexture::GetWidth() const
 {
 	return Dimensions.X;
 }
-
-/* UTexture interface
-*****************************************************************************/
 
 FTextureResource* UYzgWebBrowserTexture::CreateResource()
 {
@@ -80,9 +71,6 @@ void UYzgWebBrowserTexture::SetExternalTextureGuid(FGuid guid)
 	WebPlayerGuid = guid;
 }
 
-/* UObject interface
-*****************************************************************************/
-
 void UYzgWebBrowserTexture::BeginDestroy()
 {
 	UnregisterPlayerGuid();
@@ -102,10 +90,6 @@ void UYzgWebBrowserTexture::GetResourceSizeEx(FResourceSizeEx& CumulativeResourc
 	CumulativeResourceSize.AddUnknownMemoryBytes(Size);
 }
 
-/* UYzgWebBrowserTexture implementation
-*****************************************************************************/
-
-
 void UYzgWebBrowserTexture::TickResource(TSharedPtr<FWebBrowserTextureSample, ESPMode::ThreadSafe> Sample)
 {
 	if (GetResource() == nullptr)
@@ -120,7 +104,6 @@ void UYzgWebBrowserTexture::TickResource(TSharedPtr<FWebBrowserTextureSample, ES
 		SampleQueue.Get()->Enqueue(Sample);
 	}
 
-	// issue a render command to render the current sample
 	FWebBrowserTextureResource::FRenderParams RenderParams;
 	{
 		RenderParams.ClearColor = ClearColor;

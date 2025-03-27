@@ -1,4 +1,4 @@
-﻿// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright 2025 YZG. All Rights Reserved.
 
 #pragma once
 
@@ -7,9 +7,7 @@
 #include "YzgWebBrowserAssetManager.generated.h"
 
 class UMaterial;
-/**
- * 
- */
+
 UCLASS()
 class YZGWEBBROWSERWIDGET_API UYzgWebBrowserAssetManager : public UObject
 {

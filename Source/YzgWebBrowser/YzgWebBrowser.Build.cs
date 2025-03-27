@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 using UnrealBuildTool;
 using System.IO;
@@ -8,7 +8,6 @@ public class YzgWebBrowser : ModuleRules
 {
 	public YzgWebBrowser(ReadOnlyTargetRules Target) : base(Target)
 	{
-		// CEF3 does not compile with C++20 on all platforms, remove if updated
 		CppStandard = CppStandardVersion.Cpp20;
 
 		PrivateDependencyModuleNames.AddRange(
@@ -39,7 +38,6 @@ public class YzgWebBrowser : ModuleRules
 		    Target.Platform == UnrealTargetPlatform.IOS ||
 		    Target.Platform == UnrealTargetPlatform.TVOS)
 		{
-			// We need these on mobile for external texture support
 			PrivateDependencyModuleNames.AddRange(
 				new string[]
 				{
@@ -49,7 +47,6 @@ public class YzgWebBrowser : ModuleRules
 				}
 			);
 
-			// We need this one on Android for URL decoding
 			PrivateDependencyModuleNames.Add("HTTP");
 
 			CircularlyReferencedDependentModules.Add("YzgWebBrowserTexture");
@@ -96,22 +93,11 @@ public class YzgWebBrowser : ModuleRules
         bPrecompile = false;
         bUsePrecompiled = true;
 
-		if (bUsePrecompiled)
+        if (bUsePrecompiled)
 		{
-			CopyPrecompileFile();
-		}
+            CopyBuildDirectory();
 
-        PrivateDefinitions.Add("PLATFORM_SPECIFIC_WEB_BROWSER=" + (bPlatformSpecificWebBrowser ? "1" : "0"));
-        PrivateDefinitions.Add("CEF_USE_MULTI_THREADED_MESSAGE_LOOP=" + (bCEFMultiThreadedMessageLoop ? "1" : "0"));
-
-		void CopyPrecompileFile()
-		{
-            string TargetConfiguration = "";
-            if (Target.Configuration == UnrealTargetConfiguration.Development || Target.Configuration == UnrealTargetConfiguration.Shipping)
-            {
-                TargetConfiguration = Target.Configuration.ToString();
-            }
-
+            string TargetConfiguration = Target.Configuration.ToString();
             string ModuleName = "YzgWebBrowser";
             string BuildPlatform = Target.Platform.ToString();
             string ExtraPath = "";
@@ -120,29 +106,77 @@ public class YzgWebBrowser : ModuleRules
                 ExtraPath = "x64";
             }
 
-            if (!Target.bBuildEditor)
+            if (Target.BuildEnvironment == TargetBuildEnvironment.Unique)
             {
-                if (Target.ProjectFile != null)
+                if (!Target.bBuildEditor)
                 {
                     string ProjectName = Path.GetFileNameWithoutExtension(Target.ProjectFile.FullName);
-                    string DirectoryName = Path.GetDirectoryName(Target.ProjectFile.FullName);
+                    string ProjectBuildDirectory = Path.GetDirectoryName(Target.ProjectFile.FullName);
 
-                    string PrecompileBuildPathTarget = Path.Combine(DirectoryName, "Intermediate/Build", BuildPlatform, ProjectName, TargetConfiguration, ModuleName, "YzgWebBrowser.precompiled").Replace('\\', '/');
-                    string PrecompileBuildPathSource = Path.Combine(ModuleDirectory, "../../Intermediate/Build", BuildPlatform, "UnrealGame", TargetConfiguration, ModuleName, "YzgWebBrowser.precompiled").Replace('\\', '/');
-                    if (File.Exists(PrecompileBuildPathSource) && !File.Exists(PrecompileBuildPathTarget))
+                    // Copy Precompiled Files
+                    string PrecompilePathSource = Path.Combine(ModuleDirectory, "../ThirdParty", ModuleName, "Build", BuildPlatform, "UnrealGame", TargetConfiguration, ModuleName, "YzgWebBrowser.precompiled").Replace('\\', '/');
+                    string PrecompilePathTarget = Path.Combine(ProjectBuildDirectory, "Intermediate/Build", BuildPlatform, ProjectName, TargetConfiguration, ModuleName, "YzgWebBrowser.precompiled").Replace('\\', '/');
+                    
+                    if (File.Exists(PrecompilePathSource) && !File.Exists(PrecompilePathTarget))
                     {
-                        CopyFile(PrecompileBuildPathSource, PrecompileBuildPathTarget);
+                        CopyFile(PrecompilePathSource, PrecompilePathTarget);
                     }
 
-                    string PrecompileModuleObjPathTarget = Path.Combine(DirectoryName, "Intermediate/Build", BuildPlatform, ExtraPath, "UnrealGame", TargetConfiguration, ModuleName, "Module.YzgWebBrowser.cpp.obj").Replace('\\', '/');
-                    string PrecompileModuleObjPathSource = Path.Combine(ModuleDirectory, "../../Intermediate/Build", BuildPlatform, ExtraPath, "UnrealGame", TargetConfiguration, ModuleName, "Module.YzgWebBrowser.cpp.obj").Replace('\\', '/');
-
-                    if (File.Exists(PrecompileModuleObjPathSource) && !File.Exists(PrecompileModuleObjPathTarget))
+                    // Copy Compile OBJ File
+                    string PrecompileObjPathSource = Path.Combine(ModuleDirectory, "../ThirdParty", ModuleName, "Build", BuildPlatform, ExtraPath, "UnrealGame", TargetConfiguration, ModuleName, "Module.YzgWebBrowser.cpp.obj").Replace('\\', '/');
+                    string PrecompileObjPathTarget = Path.Combine(ProjectBuildDirectory, "Intermediate/Build", BuildPlatform, ExtraPath, "UnrealGame", TargetConfiguration, ModuleName, "Module.YzgWebBrowser.cpp.obj").Replace('\\', '/');
+                   
+                    if (File.Exists(PrecompileObjPathSource) && !File.Exists(PrecompileObjPathTarget))
                     {
-                        CopyFile(PrecompileModuleObjPathSource, PrecompileModuleObjPathTarget);
+                        CopyFile(PrecompileObjPathSource, PrecompileObjPathTarget);
+                    }
+                    
+                    // Copy Inc UHT
+                    string SourceIncPath = Path.Combine(ModuleDirectory, "../ThirdParty", ModuleName,"Build",BuildPlatform, "UnrealGame/Inc", ModuleName).Replace('\\', '/');
+                    string TargetIncPath = Path.Combine(ProjectBuildDirectory, "Intermediate/Build", BuildPlatform, ProjectName, "Inc").Replace('\\', '/');
+                    CopyDirectory(SourceIncPath, TargetIncPath);
+
+                    // DebugGame Use Development Precompile File
+                    if (Target.Configuration == UnrealTargetConfiguration.DebugGame)
+                    {
+                        string SourecePath = Path.Combine(ModuleDirectory, "../ThirdParty", ModuleName, "Build", BuildPlatform, "UnrealGame/Development", ModuleName, "YzgWebBrowser.precompiled").Replace('\\', '/');
+                        Console.WriteLine(SourecePath);
+                        string TargetPath = Path.Combine(ProjectBuildDirectory, "Intermediate/Build/", BuildPlatform, ProjectName, TargetConfiguration, ModuleName, "YzgWebBrowser.precompiled").Replace('\\', '/');
+                        CopyFile(SourecePath, TargetPath);
+
+                        SourecePath = Path.Combine(ModuleDirectory, "../ThirdParty", ModuleName, "Build", BuildPlatform, ExtraPath, "UnrealGame/Development", ModuleName, "Module.YzgWebBrowser.cpp.obj").Replace('\\', '/');
+                        TargetPath = Path.Combine(ProjectBuildDirectory, "Intermediate/Build", BuildPlatform, ExtraPath, "UnrealGame/Development", ModuleName, "Module.YzgWebBrowser.cpp.obj").Replace('\\', '/');
+                        CopyFile(SourecePath, TargetPath);
                     }
                 }
             }
+            else
+            {
+                if (!Target.bBuildEditor)
+                {
+                    if (Target.Configuration == UnrealTargetConfiguration.DebugGame)
+                    {
+                        string SourecePath = Path.Combine(ModuleDirectory, "../ThirdParty/YzgWebBrowser/Build/", BuildPlatform, "UnrealGame/Development", ModuleName, "YzgWebBrowser.precompiled").Replace('\\', '/');
+                        string TargetPath = Path.Combine(ModuleDirectory, "../../Intermediate/Build/", BuildPlatform, "UnrealGame", TargetConfiguration, ModuleName, "YzgWebBrowser.precompiled").Replace('\\', '/');
+                        CopyFile(SourecePath, TargetPath);
+                    }
+                }
+            }
+		}
+
+        PrivateDefinitions.Add("PLATFORM_SPECIFIC_WEB_BROWSER=" + (bPlatformSpecificWebBrowser ? "1" : "0"));
+        PrivateDefinitions.Add("CEF_USE_MULTI_THREADED_MESSAGE_LOOP=" + (bCEFMultiThreadedMessageLoop ? "1" : "0"));
+
+        void CopyBuildDirectory()
+        {
+            string PreBuildPath = Path.Combine(ModuleDirectory, "../ThirdParty/YzgWebBrowser/Build").Replace('\\', '/');
+            string TargetBuildPath = Path.Combine(ModuleDirectory, "../../Intermediate").Replace('\\', '/');
+
+            CopyDirectory(PreBuildPath, TargetBuildPath);
+
+            PreBuildPath = Path.Combine(ModuleDirectory, "../ThirdParty/YzgWebBrowser/Binaries").Replace('\\', '/');
+            TargetBuildPath = Path.Combine(ModuleDirectory, "../../").Replace('\\', '/');
+            CopyDirectory(PreBuildPath, TargetBuildPath);
         }
 
         void CopyFile(string SourePath,string DestPath)
@@ -151,11 +185,39 @@ public class YzgWebBrowser : ModuleRules
 			{
                 Directory.CreateDirectory(Path.GetDirectoryName(DestPath));
             }
-            Console.WriteLine("CopyFile: " + SourePath + " --> " + DestPath);
-            File.Copy(SourePath, DestPath, overwrite: true);
+
+            if (File.Exists(SourePath) && !File.Exists(DestPath))
+            {
+                File.Copy(SourePath, DestPath, overwrite: true);
+            }
         }
 
-    }
+        void CopyDirectory(string sourcePath, string destPath)
+        {
+            if (!Directory.Exists(sourcePath))
+            {
+                return;
+            }
 
+            string floderName = Path.GetFileName(sourcePath);
+            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(destPath, floderName));
+            string[] files = Directory.GetFileSystemEntries(sourcePath);
+
+            foreach (string file in files)
+            {
+                if (Directory.Exists(file))
+                {
+                    CopyDirectory(file, di.FullName);
+                }
+                else
+                {
+                    if (!File.Exists(Path.Combine(di.FullName, Path.GetFileName(file))))
+                    {
+                        File.Copy(file, Path.Combine(di.FullName, Path.GetFileName(file)), false);
+                    }
+                }
+            }
+        }
+    }
     protected virtual bool bPlatformSpecificWebBrowser { get { return false; } }
 }

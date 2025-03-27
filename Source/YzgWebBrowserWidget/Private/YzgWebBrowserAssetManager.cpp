@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 #include "YzgWebBrowserAssetManager.h"
 
@@ -16,7 +16,6 @@ UYzgWebBrowserAssetManager::UYzgWebBrowserAssetManager(const FObjectInitializer&
 	DefaultTranslucentMaterial(FString(TEXT("/YzgWebBrowserWidget/WebTexture_TM.WebTexture_TM")))
 {
 #if WITH_EDITOR || PLATFORM_ANDROID || PLATFORM_IOS
-	// Add a hard reference to UWebBrowserTexture, without this the WebBrowserTexture DLL never gets loaded on Windows.
 	UYzgWebBrowserTexture::StaticClass();
 
 #endif

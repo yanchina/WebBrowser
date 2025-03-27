@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 #include "YzgWebBrowser.h"
 #include "SWebBrowser.h"
@@ -14,8 +14,6 @@
 #define LOCTEXT_NAMESPACE "WebBrowser"
 
 /////////////////////////////////////////////////////
-// UYzgWebBrowser
-
 UYzgWebBrowser::UYzgWebBrowser(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -212,7 +210,5 @@ const FText UYzgWebBrowser::GetPaletteCategory()
 }
 
 #endif
-
-/////////////////////////////////////////////////////
 
 #undef LOCTEXT_NAMESPACE

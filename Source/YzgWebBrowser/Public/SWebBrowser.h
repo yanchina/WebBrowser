@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 #pragma once
 
@@ -34,7 +34,7 @@ public:
 	DECLARE_DELEGATE_RetVal_OneParam(bool, FOnDragWindow, const FPointerEvent& /* MouseEvent */);
 
 	SLATE_BEGIN_ARGS(SWebBrowser)
-		: _InitialURL(TEXT("https://www.google.com"))
+		: _InitialURL(TEXT("https://chat.deepseek.com"))
 		, _ShowControls(true)
 		, _ShowAddressBar(false)
 		, _ShowErrorMessage(true)

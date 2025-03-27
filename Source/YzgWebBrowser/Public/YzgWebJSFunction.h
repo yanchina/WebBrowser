@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 #pragma once
 
@@ -129,7 +129,6 @@ struct FWebJSParam
 
 class FWebJSScripting;
 
-/** Base class for JS callback objects. */
 USTRUCT()
 struct FYzgWebJSCallbackBase
 {
@@ -157,11 +156,6 @@ private:
 	FGuid CallbackId;
 };
 
-/**
- * Representation of a remote JS function.
- * FWebJSFunction objects represent a JS function and allow calling them from native code.
- * FWebJSFunction objects can also be added to delegates and events using the Bind/AddLambda method.
- */
 USTRUCT()
 struct FYzgWebJSFunction
 	: public FYzgWebJSCallbackBase
@@ -183,15 +177,6 @@ struct FYzgWebJSFunction
 	}
 };
 
-/** 
- *  Representation of a remote JS async response object.
- *  UFUNCTIONs taking a FWebJSResponse will get it passed in automatically when called from a web browser.
- *  Pass a result or error back by invoking Success or Failure on the object.
- *  UFunctions accepting a FWebJSResponse should have a void return type, as any value returned from the function will be ignored.
- *  Calling the response methods does not have to happen before returning from the function, which means you can use this to implement asynchronous functionality.
- *
- *  Note that the remote object will become invalid as soon as a result has been delivered, so you can only call either Success or Failure once.
- */
 USTRUCT()
 struct FYzgWebJSResponse
 	: public FYzgWebJSCallbackBase
@@ -206,19 +191,11 @@ struct FYzgWebJSResponse
 		: FYzgWebJSCallbackBase(InScripting, InCallbackId)
 	{}
 
-	/**
-	 * Indicate successful completion without a return value.
-	 * The remote Promise's then() handler will be executed without arguments.
-	 */
 	void Success() const
 	{
 		Invoke(0, nullptr, false);
 	}
 
-	/**
-	 * Indicate successful completion passing a return value back.
-	 * The remote Promise's then() handler will be executed with the value passed as its single argument.
-	 */
 	template<typename T>
 	void Success(T Arg) const
 	{
@@ -226,10 +203,6 @@ struct FYzgWebJSResponse
 		Invoke(1, ArgArray, false);
 	}
 
-	/**
-	 * Indicate failed completion, passing an error message back to JS.
-	 * The remote Promise's catch() handler will be executed with the value passed as the error reason.
-	 */
 	template<typename T>
 	void Failure(T Arg) const
 	{

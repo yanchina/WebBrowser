@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 #include "YzgWebBrowserWidgetModule.h"
 #include "YzgWebBrowserAssetManager.h"

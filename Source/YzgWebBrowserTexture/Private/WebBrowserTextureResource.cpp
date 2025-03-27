@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 #include "WebBrowserTextureResource.h"
 
@@ -19,22 +19,14 @@
 
 DEFINE_LOG_CATEGORY(LogWebBrowserTexture);
 
-/* FWebBrowserTextureResource structors
- *****************************************************************************/
-
 FWebBrowserTextureResource::FWebBrowserTextureResource(UYzgWebBrowserTexture& InOwner, FIntPoint& InOwnerDim, SIZE_T& InOwnerSize)
 	: Cleared(false)
 	, CurrentClearColor(FLinearColor::Transparent)
 	, Owner(InOwner)
 	, OwnerDim(InOwnerDim)
 	, OwnerSize(InOwnerSize)
-{
-	UE_LOG(LogWebBrowserTexture, VeryVerbose, TEXT("FWebBrowserTextureResource:FWebBrowserTextureResource %d %d"), OwnerDim.X, OwnerDim.Y);
+{;
 }
-
-
-/* FWebBrowserTextureResource interface
- *****************************************************************************/
 
 void FWebBrowserTextureResource::Render(const FRenderParams& Params)
 {
@@ -44,7 +36,6 @@ void FWebBrowserTextureResource::Render(const FRenderParams& Params)
 
 	if (SampleSource.IsValid())
 	{
-		// get the most current sample to be rendered
 		TSharedPtr<FWebBrowserTextureSample, ESPMode::ThreadSafe> Sample;
 		bool SampleValid = false;
 		
@@ -55,12 +46,11 @@ void FWebBrowserTextureResource::Render(const FRenderParams& Params)
 
 		if (!SampleValid)
 		{
-			return; // no sample to render
+			return;
 		}
 
 		check(Sample.IsValid());
 
-		// render the sample
 		CopySample(Sample, Params.ClearColor);
 
 		if (!GSupportsImageExternal && Params.PlayerGuid.IsValid())
@@ -81,18 +71,10 @@ void FWebBrowserTextureResource::Render(const FRenderParams& Params)
 	}
 }
 
-
-/* FRenderTarget interface
- *****************************************************************************/
-
 FIntPoint FWebBrowserTextureResource::GetSizeXY() const
 {
 	return FIntPoint(Owner.GetWidth(), Owner.GetHeight());
 }
-
-
-/* FTextureResource interface
- *****************************************************************************/
 
 FString FWebBrowserTextureResource::GetFriendlyName() const
 {
@@ -114,7 +96,6 @@ uint32 FWebBrowserTextureResource::GetSizeY() const
 
 void FWebBrowserTextureResource::InitRHI(FRHICommandListBase& RHICmdList)
 {
-	// create the sampler state
 	FSamplerStateInitializerRHI SamplerStateInitializer(
 		(ESamplerFilter)UDeviceProfileManager::Get().GetActiveProfile()->GetTextureLODSettings()->GetSamplerFilter(&Owner),
 		(Owner.AddressX == TA_Wrap) ? AM_Wrap : ((Owner.AddressX == TA_Clamp) ? AM_Clamp : AM_Mirror),
@@ -138,14 +119,8 @@ void FWebBrowserTextureResource::ReleaseRHI()
 	UpdateTextureReference(nullptr);
 }
 
-
-/* FWebBrowserTextureResource implementation
- *****************************************************************************/
-
 void FWebBrowserTextureResource::ClearTexture(const FLinearColor& ClearColor)
 {
-	UE_LOG(LogWebBrowserTexture, VeryVerbose, TEXT("FWebBrowserTextureResource:ClearTexture"));
-	// create output render target if we don't have one yet
 	const ETextureCreateFlags OutputCreateFlags = ETextureCreateFlags::Dynamic | ETextureCreateFlags::SRGB;
 
 	if ((ClearColor != CurrentClearColor) || !OutputTarget.IsValid() || !EnumHasAllFlags(OutputTarget->GetFlags(), OutputCreateFlags))
@@ -169,7 +144,6 @@ void FWebBrowserTextureResource::ClearTexture(const FLinearColor& ClearColor)
 		UpdateTextureReference(OutputTarget);
 	}
 
-	// draw the clear color
 	FRHICommandListImmediate& CommandList = FRHICommandListExecutor::GetImmediateCommandList();
 	{
 		CommandList.Transition(FRHITransitionInfo(RenderTargetTextureRHI, ERHIAccess::Unknown, ERHIAccess::RTV));
@@ -184,16 +158,10 @@ void FWebBrowserTextureResource::CopySample(const TSharedPtr<FWebBrowserTextureS
 {
 	FRHITexture* SampleTexture = Sample->GetTexture();
 	FRHITexture2D* SampleTexture2D = (SampleTexture != nullptr) ? SampleTexture->GetTexture2D() : nullptr;
-	// If the sample already provides a texture resource, we simply use that
-	// as the output render target. If the sample only provides raw data, then
-	// we create our own output render target and copy the data into it.
 	if (SampleTexture2D != nullptr)
 	{
-		UE_LOG(LogWebBrowserTexture, VeryVerbose, TEXT("FWebBrowserTextureResource:CopySample 1"));
-		// use sample's texture as the new render target.
 		if (TextureRHI != SampleTexture2D)
 		{
-			UE_LOG(LogWebBrowserTexture, VeryVerbose, TEXT("FWebBrowserTextureResource:CopySample 11"));
 			UpdateTextureReference(SampleTexture2D);
 
 			OutputTarget.SafeRelease();
@@ -202,8 +170,6 @@ void FWebBrowserTextureResource::CopySample(const TSharedPtr<FWebBrowserTextureS
 	}
 	else
 	{
-		UE_LOG(LogWebBrowserTexture, VeryVerbose, TEXT("FWebBrowserTextureResource:CopySample 2"));
-		// create a new output render target if necessary
 		const ETextureCreateFlags OutputCreateFlags = TexCreate_Dynamic | TexCreate_SRGB;
 		const FIntPoint SampleDim = Sample->GetDim();
 
@@ -230,9 +196,6 @@ void FWebBrowserTextureResource::CopySample(const TSharedPtr<FWebBrowserTextureS
 			UpdateTextureReference(OutputTarget);
 		}
 
-		UE_LOG(LogWebBrowserTexture, VeryVerbose, TEXT("WebBrowserTextureResource:CopySample: %d x %d"), SampleDim.X, SampleDim.Y);
-
-		// copy sample data to output render target
 		FUpdateTextureRegion2D Region(0, 0, 0, 0, SampleDim.X, SampleDim.Y);
 		RHIUpdateTexture2D(RenderTargetTextureRHI.GetReference(), 0, Region, Sample->GetStride(), (uint8*)Sample->GetBuffer());
 	}
@@ -275,5 +238,4 @@ void FWebBrowserTextureResource::UpdateTextureReference(FRHITexture2D* NewTextur
 	{
 		OwnerDim = FIntPoint::ZeroValue;
 	}
-	UE_LOG(LogWebBrowserTexture, VeryVerbose, TEXT("FWebBrowserTextureResource:UpdateTextureReference: %d x %d"), OwnerDim.X, OwnerDim.Y);
 }

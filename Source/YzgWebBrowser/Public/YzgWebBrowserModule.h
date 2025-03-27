@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 #pragma once
 
@@ -8,42 +8,24 @@
 
 class IWebBrowserSingleton;
 
-/**
- * WebBrowser initialization settings, can be used to override default init behaviors.
- */
+
 struct FWebBrowserInitSettings
 {
 public:
-	/**
-	 * Default constructor. Initializes all members with default behavior values.
-	 */
+
     YZGWEBBROWSER_API FWebBrowserInitSettings();
 
-	// The string which is appended to the browser's user-agent value.
 	FString ProductVersion;
 };
 
-/**
- * WebBrowserModule interface
- */
 class IYzgWebBrowserModule : public IModuleInterface
 {
 public:
-	/**
-	 * Get or load the Web Browser Module
-	 * 
-	 * @return The loaded module
-	 */
 	static inline IYzgWebBrowserModule& Get()
 	{
 		return FModuleManager::LoadModuleChecked< IYzgWebBrowserModule >("YzgWebBrowser");
 	}
 	
-	/**
-	 * Check whether the module has already been loaded
-	 * 
-	 * @return True if the module is loaded
-	 */
 	static inline bool IsAvailable()
 	{
 		return FModuleManager::Get().IsModuleLoaded("YzgWebBrowser");

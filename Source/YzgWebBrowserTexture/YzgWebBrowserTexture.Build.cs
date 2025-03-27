@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2025 YZG. All Rights Reserved.
 
 using UnrealBuildTool;
 using System.IO;
@@ -23,8 +23,7 @@ public class YzgWebBrowserTexture : ModuleRules
                 "Engine"
             }
         );
-        // WebBrowserTexture objects are needed only on Android, but we also need to be able to
-        // cook the asset so we must include it in editor builds
+
         if (Target.Platform == UnrealTargetPlatform.Android ||
             Target.Platform == UnrealTargetPlatform.IOS ||
             Target.Platform == UnrealTargetPlatform.TVOS ||
