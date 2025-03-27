@@ -66,13 +66,5 @@ public class YzgCEF3 : ModuleRules
                 }
             }
         }
-
-        if (Directory.Exists(Path.Combine(ModuleDirectory, "YzgWebBrowser")))
-        {
-            foreach (string FileName in Directory.EnumerateFiles(Path.Combine(ModuleDirectory, "YzgWebBrowser"), "*.*", SearchOption.AllDirectories))
-            {
-                RuntimeDependencies.Add(FileName.Replace('\\', '/'));
-            }
-        }
     }
 }
