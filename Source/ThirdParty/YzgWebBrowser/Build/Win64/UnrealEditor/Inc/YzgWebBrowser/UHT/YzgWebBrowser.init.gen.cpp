@@ -17,7 +17,7 @@ void EmptyLinkFunctionForGeneratedCodeYzgWebBrowser_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0xE656C7B6,
+				0x62758DE8,
 				0x53D52A5C,
 				METADATA_PARAMS(0, nullptr)
 			};
@@ -25,5 +25,5 @@ void EmptyLinkFunctionForGeneratedCodeYzgWebBrowser_init() {}
 		}
 		return Z_Registration_Info_UPackage__Script_YzgWebBrowser.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_YzgWebBrowser(Z_Construct_UPackage__Script_YzgWebBrowser, TEXT("/Script/YzgWebBrowser"), Z_Registration_Info_UPackage__Script_YzgWebBrowser, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xE656C7B6, 0x53D52A5C));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_YzgWebBrowser(Z_Construct_UPackage__Script_YzgWebBrowser, TEXT("/Script/YzgWebBrowser"), Z_Registration_Info_UPackage__Script_YzgWebBrowser, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x62758DE8, 0x53D52A5C));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
