@@ -34,14 +34,6 @@
 			]
 		},
 		{
-			"Name": "YzgWebBrowser",
-			"Type": "Runtime",
-			"LoadingPhase": "PreDefault",
-			"PlatformAllowList": [
-				"Win64"
-			]
-		},
-		{
 			"Name": "YzgWebBrowserTexture",
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault",
