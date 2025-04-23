@@ -6,8 +6,11 @@
 #include "Modules/ModuleInterface.h"
 #include "Modules/ModuleManager.h"
 
-class IWebBrowserSingleton;
+#ifndef YZGWEBBROWSER_API
+#define YZGWEBBROWSER_API DLLEXPORT
+#endif
 
+class IWebBrowserSingleton;
 
 struct FWebBrowserInitSettings
 {
@@ -15,7 +18,7 @@ public:
 
     YZGWEBBROWSER_API FWebBrowserInitSettings();
 
-	FString ProductVersion;
+    FString ProductVersion;
 };
 
 class IYzgWebBrowserModule : public IModuleInterface

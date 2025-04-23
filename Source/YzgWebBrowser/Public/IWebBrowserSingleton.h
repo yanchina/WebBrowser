@@ -84,7 +84,7 @@ struct FCreateBrowserWindowSettings
 	TArray<FString> AltRetryDomains;
     bool bUseAcceleratedPaint;
 	bool bManageInPool = false;
-	bool bCreateForReady;
+	bool bCreateForReady = false;
 };
 
 struct FCreateBrowserPassData
