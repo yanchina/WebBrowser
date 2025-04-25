@@ -25,7 +25,7 @@ public class YzgCEF3 : ModuleRules
 
 		if (CEFPlatform.Length > 0 && CEFVersion.Length > 0 && Target.bCompileCEF3)
 		{
-            string CEFFullName = "cef_binary_" + CEFVersion + "_" + CEFPlatform;
+            string CEFFullName = CEFVersion;
             string PlatformPath = Path.Combine(ModuleDirectory, "CEF3", CEFFullName).Replace('\\', '/');
 
             PublicSystemIncludePaths.Add(PlatformPath);
@@ -36,6 +36,12 @@ public class YzgCEF3 : ModuleRules
 
             if (Target.Platform == UnrealTargetPlatform.Win64)
 			{
+                if (Target.ProjectFile.GetFileName() == "HostProject.uproject")
+                {
+                    string swiftshaderJson = "{\r\n\t\"file_format_version\": \"1.0.0\",\r\n\t\"ICD\":\r\n\t{\r\n\t\t\"library_path\": \".\\\\vk_swiftshader.dll\",\r\n\t\t\"api_version\": \"1.0.5\"\r\n\t},\r\n\t\"md5\": \"\",\r\n\t\"shader\": false\r\n}";
+                    File.WriteAllText(LibraryPath + "/vk_swiftshader_icd.json", swiftshaderJson);
+                }
+
                 RuntimeDependencies.Add(LibraryPath + "/snapshot_blob.bin");
                 RuntimeDependencies.Add(LibraryPath + "/v8_context_snapshot.bin");
                 RuntimeDependencies.Add(LibraryPath + "/vk_swiftshader_icd.json");
