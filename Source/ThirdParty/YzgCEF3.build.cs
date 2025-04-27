@@ -25,7 +25,7 @@ public class YzgCEF3 : ModuleRules
 
 		if (CEFPlatform.Length > 0 && CEFVersion.Length > 0 && Target.bCompileCEF3)
 		{
-            string CEFFullName = "cef_binary_" + CEFVersion + "_" + CEFPlatform;
+            string CEFFullName = CEFVersion;
             string PlatformPath = Path.Combine(ModuleDirectory, "CEF3", CEFFullName).Replace('\\', '/');
 
             PublicSystemIncludePaths.Add(PlatformPath);

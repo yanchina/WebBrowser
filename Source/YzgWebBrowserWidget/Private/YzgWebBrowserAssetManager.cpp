@@ -12,8 +12,8 @@
 
 UYzgWebBrowserAssetManager::UYzgWebBrowserAssetManager(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer) ,
-	DefaultMaterial(FString(TEXT("/YzgWebBrowserWidget/WebTexture_M.WebTexture_M"))) ,
-	DefaultTranslucentMaterial(FString(TEXT("/YzgWebBrowserWidget/WebTexture_TM.WebTexture_TM")))
+	DefaultMaterial(FSoftObjectPath(FString(TEXT("/YzgWebBrowserWidget/WebTexture_M.WebTexture_M")))) ,
+	DefaultTranslucentMaterial(FSoftObjectPath(FString(TEXT("/YzgWebBrowserWidget/WebTexture_TM.WebTexture_TM"))))
 {
 #if WITH_EDITOR || PLATFORM_ANDROID || PLATFORM_IOS
 	UYzgWebBrowserTexture::StaticClass();
