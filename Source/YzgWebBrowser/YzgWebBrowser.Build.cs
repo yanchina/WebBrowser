@@ -105,19 +105,25 @@ public class YzgWebBrowser : ModuleRules
 
                 if (Target.bBuildEditor)
                 {
-                    PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty/Build", BuildPlatform, "x64/UnrealEditor", TargetConfiguration, "YzgWebBrowser/UnrealEditor-YzgWebBrowser.lib").Replace('\\', '/'));
+                    PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "lib/Build", BuildPlatform, "x64/UnrealEditor", TargetConfiguration, "YzgWebBrowser/UnrealEditor-YzgWebBrowser.lib").Replace('\\', '/'));
 
-                    CopyFile(Path.Combine(ModuleDirectory, "ThirdParty/Binaries", BuildPlatform, "UnrealEditor-YzgWebBrowser.dll").Replace('\\', '/'), Path.Combine(ModuleDirectory, "../../Binaries/Win64/UnrealEditor-YzgWebBrowser.dll").Replace('\\', '/'));
+                    CopyFile(Path.Combine(ModuleDirectory, "lib/Binaries", BuildPlatform, "UnrealEditor-YzgWebBrowser.dll").Replace('\\', '/'), Path.Combine(ModuleDirectory, "../../Binaries/Win64/UnrealEditor-YzgWebBrowser.dll").Replace('\\', '/'));
                 }
                 else
                 {
+                    string ObjPath;
                     if (Target.Configuration == UnrealTargetConfiguration.Shipping)
                     {
-                        PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty/Build", BuildPlatform, "x64/UnrealGame", TargetConfiguration, "YzgWebBrowser/Module.YzgWebBrowser.cpp.obj").Replace('\\', '/'));
+                        ObjPath = Path.Combine(ModuleDirectory, "lib/Build", BuildPlatform, "x64/UnrealGame", TargetConfiguration, "YzgWebBrowser").Replace('\\', '/');
                     }
                     else
                     {
-                        PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "ThirdParty/Build", BuildPlatform, "x64/UnrealGame/Development/YzgWebBrowser/Module.YzgWebBrowser.cpp.obj").Replace('\\', '/'));
+                        ObjPath = Path.Combine(ModuleDirectory, "lib/Build", BuildPlatform, "x64/UnrealGame/Development/YzgWebBrowser").Replace('\\', '/');
+                    }
+
+                    foreach (string FileName in Directory.EnumerateFiles(ObjPath, "*.obj", SearchOption.AllDirectories))
+                    {
+                        PublicAdditionalLibraries.Add(FileName);
                     }
                 }
             }

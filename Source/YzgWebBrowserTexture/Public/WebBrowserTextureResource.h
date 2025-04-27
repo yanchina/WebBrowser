@@ -107,7 +107,7 @@ protected:
 	 *
 	 * @param NewTexture The texture to set.
 	 */
-	void UpdateTextureReference(FRHITexture2D* NewTexture);
+	void UpdateTextureReference(FRHITexture* NewTexture);
 
 private:
 
@@ -118,10 +118,10 @@ private:
 	FLinearColor CurrentClearColor;
 
 	/** Input render target if the texture samples don't provide one (for conversions). */
-	TRefCountPtr<FRHITexture2D> InputTarget;
+	TRefCountPtr<FRHITexture> InputTarget;
 
 	/** Output render target if the texture samples don't provide one. */
-	TRefCountPtr<FRHITexture2D> OutputTarget;
+	TRefCountPtr<FRHITexture> OutputTarget;
 
 	/** The webbrowser texture that owns this resource. */
 	UYzgWebBrowserTexture& Owner;
