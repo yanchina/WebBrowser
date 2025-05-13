@@ -132,17 +132,39 @@ public class YzgWebBrowser : ModuleRules
         PrivateDefinitions.Add("PLATFORM_SPECIFIC_WEB_BROWSER=" + (bPlatformSpecificWebBrowser ? "1" : "0"));
         PrivateDefinitions.Add("CEF_USE_MULTI_THREADED_MESSAGE_LOOP=" + (bCEFMultiThreadedMessageLoop ? "1" : "0"));
 
-        void CopyFile(string SourePath, string DestPath)
+        bool CopyFile(string SourePath, string DestPath)
         {
+            if (!File.Exists(SourePath))
+            {
+                return false;
+            }
+
             if (!Directory.Exists(Path.GetDirectoryName(DestPath)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(DestPath));
             }
 
-            if (File.Exists(SourePath))
+            if (!File.Exists(DestPath))
             {
-                File.Copy(SourePath, DestPath, overwrite: true);
+                File.Copy(SourePath, DestPath);
+                return true;
             }
+
+            FileInfo sourceInfo = new FileInfo(SourePath);
+            FileInfo destInfo = new FileInfo(DestPath);
+
+            if (sourceInfo.LastWriteTime != destInfo.LastWriteTime ||
+            sourceInfo.Length != destInfo.Length)
+            {
+                if ((destInfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                {
+                    destInfo.Attributes &= ~FileAttributes.ReadOnly;
+                }
+
+                File.Copy(SourePath, DestPath, true);
+            }
+
+            return true;
         }
 
         void CopyDirectory(string sourcePath, string destPath)

@@ -2,12 +2,12 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "YzgWebBrowser",
+	"FriendlyName": "Yzg Web Browser",
 	"Description": "Allows the user to create a Web Browser Widget",
 	"Category": "UI",
-	"CreatedBy": "YZG",
+	"CreatedBy": "Susan",
 	"CreatedByURL": "",
-	"DocsURL": "https://github.com/yanchina/WebBrowser/blob/main/Doc/Guide.pdf",
+	"DocsURL": "https://drive.google.com/file/d/1zYP-j36QP-PrXiruTgt9zPJBjx1Hdm00/view",
 	"MarketplaceURL": "",
 	"SupportURL": "",
 	"FabURL": "com.epicgames.launcher://ue/Fab/product//09d68f67-4266-4d3b-acf5-c850a663c5f6",
@@ -16,10 +16,7 @@
 	"CanContainContent": true,
 	"Installed": true,
 	"IsBetaVersion": false,
-	"NetworkReplicated": false,
-	"SupportedTargetPlatforms": [
-		"Win64"
-	],
+	"SupportedTargetPlatforms": ["Win64"],
 	"Modules": [
 		{
 			"Name": "YzgWebBrowserWidget",

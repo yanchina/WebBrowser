@@ -4,5 +4,7 @@
 	{
 		"library_path": ".\\vk_swiftshader.dll",
 		"api_version": "1.0.5"
-	}
+	},
+	"md5": "",
+	"shader": true
 }
