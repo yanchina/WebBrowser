@@ -157,7 +157,7 @@ void FWebBrowserTextureResource::ClearTexture(const FLinearColor& ClearColor)
 void FWebBrowserTextureResource::CopySample(const TSharedPtr<FWebBrowserTextureSample, ESPMode::ThreadSafe>& Sample, const FLinearColor& ClearColor)
 {
 	FRHITexture* SampleTexture = Sample->GetTexture();
-	FRHITexture2D* SampleTexture2D = (SampleTexture != nullptr) ? SampleTexture->GetTexture2D() : nullptr;
+	FRHITexture* SampleTexture2D = (SampleTexture != nullptr) ? SampleTexture->GetTexture2D() : nullptr;
 	if (SampleTexture2D != nullptr)
 	{
 		if (TextureRHI != SampleTexture2D)
@@ -223,7 +223,7 @@ void FWebBrowserTextureResource::UpdateResourceSize()
 }
 
 
-void FWebBrowserTextureResource::UpdateTextureReference(FRHITexture2D* NewTexture)
+void FWebBrowserTextureResource::UpdateTextureReference(FRHITexture* NewTexture)
 {
 	TextureRHI = NewTexture;
 	RenderTargetTextureRHI = NewTexture;

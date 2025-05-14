@@ -173,7 +173,7 @@ namespace YzgCEF3Utils
     {
        const FString BaseDir = IPluginManager::Get().FindPlugin(TEXT("YzgWebBrowserWidget"))->GetBaseDir();
 #if PLATFORM_WINDOWS
-       return FPaths::Combine(*BaseDir, TEXT("Source/ThirdParty/CEF3"), TEXT(CEF3_LIB_VERSION));
+       return FPaths::Combine(*BaseDir, TEXT("Source/ThirdParty/CEF3"), TEXT(CEF3_FULL_NAME));
 #endif
         return FString();
     }

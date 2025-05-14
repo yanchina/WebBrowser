@@ -25,24 +25,26 @@ public class YzgCEF3 : ModuleRules
 
 		if (CEFPlatform.Length > 0 && CEFVersion.Length > 0 && Target.bCompileCEF3)
 		{
-            string PlatformPath = Path.Combine(ModuleDirectory, "CEF3", CEFVersion).Replace('\\', '/');
-            PublicSystemIncludePaths.Add(PlatformPath);
-            string LibraryPath = Path.Combine(ModuleDirectory, "CEF3", CEFVersion, "Release").Replace('\\', '/'); 
+            string CEFFullName = CEFVersion;
+            string PlatformPath = Path.Combine(ModuleDirectory, "CEF3", CEFFullName).Replace('\\', '/');
 
+            PublicSystemIncludePaths.Add(PlatformPath);
+
+            string LibraryPath = PlatformPath.Replace('\\', '/') + "/Release";
             PublicDefinitions.Add("CEF3_LIB_VERSION=\"" + CEFVersion + "\"");
+            PublicDefinitions.Add("CEF3_FULL_NAME=\"" + CEFFullName + "\"");
 
             if (Target.Platform == UnrealTargetPlatform.Win64)
 			{
-                if (Target.ProjectFile.GetFileName() == "HostProject.uproject")
-                {
-                    string swiftshaderJson = "{\r\n\t\"file_format_version\": \"1.0.0\",\r\n\t\"ICD\":\r\n\t{\r\n\t\t\"library_path\": \".\\\\vk_swiftshader.dll\",\r\n\t\t\"api_version\": \"1.0.5\"\r\n\t},\r\n\t\"md5\": \"\",\r\n\t\"shader\": false\r\n}";
-                    File.WriteAllText(LibraryPath + "/vk_swiftshader_icd.json", swiftshaderJson);
-                }
-
                 RuntimeDependencies.Add(LibraryPath + "/snapshot_blob.bin");
                 RuntimeDependencies.Add(LibraryPath + "/v8_context_snapshot.bin");
                 RuntimeDependencies.Add(LibraryPath + "/vk_swiftshader_icd.json");
                 RuntimeDependencies.Add(LibraryPath + "/icudtl.dat");
+
+                if (File.Exists(LibraryPath + "/v8_context.dat"))
+                {
+                    RuntimeDependencies.Add(LibraryPath + "/v8_context.dat");
+                }
 
                 foreach (string FileName in Directory.EnumerateFiles(LibraryPath, "*.pak", SearchOption.AllDirectories))
                 {
@@ -65,7 +67,7 @@ public class YzgCEF3 : ModuleRules
             {
                 if (Target.Platform == UnrealTargetPlatform.Win64)
                 {
-                    RuntimeDependencies.Add(LibraryPath + "/cefclient.exe");
+                    RuntimeDependencies.Add(LibraryPath + "/cefclient.dll");
                 }
             }
         }
