@@ -94,7 +94,7 @@ uint32 FWebBrowserTextureResource::GetSizeY() const
 }
 
 
-void FWebBrowserTextureResource::InitRHI(FRHICommandListBase& RHICmdList)
+void FWebBrowserTextureResource::InitRHI()
 {
 	FSamplerStateInitializerRHI SamplerStateInitializer(
 		(ESamplerFilter)UDeviceProfileManager::Get().GetActiveProfile()->GetTextureLODSettings()->GetSamplerFilter(&Owner),
