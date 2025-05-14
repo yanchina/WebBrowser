@@ -105,7 +105,7 @@ public class YzgWebBrowser : ModuleRules
 
                 if (Target.bBuildEditor)
                 {
-                    PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "lib/Build", BuildPlatform, "x64/UnrealEditor", TargetConfiguration, "YzgWebBrowser/UnrealEditor-YzgWebBrowser.lib").Replace('\\', '/'));
+                    PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "lib/Build", BuildPlatform, "UnrealEditor", TargetConfiguration, "YzgWebBrowser/UnrealEditor-YzgWebBrowser.lib").Replace('\\', '/'));
 
                     CopyFile(Path.Combine(ModuleDirectory, "lib/Binaries", BuildPlatform, "UnrealEditor-YzgWebBrowser.dll").Replace('\\', '/'), Path.Combine(ModuleDirectory, "../../Binaries/Win64/UnrealEditor-YzgWebBrowser.dll").Replace('\\', '/'));
                 }
@@ -114,11 +114,11 @@ public class YzgWebBrowser : ModuleRules
                     string ObjPath;
                     if (Target.Configuration == UnrealTargetConfiguration.Shipping)
                     {
-                        ObjPath = Path.Combine(ModuleDirectory, "lib/Build", BuildPlatform, "x64/UnrealGame", TargetConfiguration, "YzgWebBrowser").Replace('\\', '/');
+                        ObjPath = Path.Combine(ModuleDirectory, "lib/Build", BuildPlatform, "UnrealGame", TargetConfiguration, "YzgWebBrowser").Replace('\\', '/');
                     }
                     else
                     {
-                        ObjPath = Path.Combine(ModuleDirectory, "lib/Build", BuildPlatform, "x64/UnrealGame/Development/YzgWebBrowser").Replace('\\', '/');
+                        ObjPath = Path.Combine(ModuleDirectory, "lib/Build", BuildPlatform, "UnrealGame/Development/YzgWebBrowser").Replace('\\', '/');
                     }
 
                     foreach (string FileName in Directory.EnumerateFiles(ObjPath, "*.obj", SearchOption.AllDirectories))
